@@ -4,8 +4,8 @@ import time
 import matplotlib.pyplot as plt
 
 
-def cal_dis(dis, path):
-    # calculate the length of the path
+def cal_path_dis(dis, path):
+    # calculate the length of the path between 2 points
     length = 0
     for i in range(len(path) - 1):
         length += dis[path[i]][path[i + 1]]
@@ -121,7 +121,7 @@ def tabu( iter):
     con_iter = 0
     sol = city_list
     gbest_path = city_list.copy()  # the best-so-far path
-    gbest = cal_dis(dis, gbest_path)  # the best-so-far length
+    gbest = cal_path_dis(dis, gbest_path)  # the best-so-far length
     action_list = []
     for i in range(city_num - 1):  # swap
         for j in range(i + 1, city_num):
@@ -148,7 +148,7 @@ def tabu( iter):
         for i in range(na):
             if TC[i] == 0:
                 new_sol = act(sol, action_list[i])
-                new_length = cal_dis(dis, new_sol)
+                new_length = cal_path_dis(dis, new_sol)
                 if new_length <= new_best_length:
                     new_best_length = new_length
                     new_best_sol = new_sol
