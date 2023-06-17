@@ -58,24 +58,25 @@ def act(sol, action):
 
 
     return new_sol
-def read_Data(path):
-    city_num = 0
-    with open(path, "r") as f:
-        for line in f:
-            tmp = line.strip().split(' ')
-            if (city_num < int(tmp[0])):
-                city_num = int(tmp[0])
-    city_num += 1
-    print(city_num)
-    min_coord = 0
-    max_coord = 10
+def read_Data():
+    city_num = 128
     dis = [[10000 for _ in range(city_num)] for _ in range(city_num)]  # distance matrix
-    with open(path, "r") as f:
+    i=0
+    with open("DataSet.txt", "r") as f:
         for line in f:
-            tmp = line.strip().split(' ')
-            dis[int(tmp[0])][int(tmp[1])] = int(tmp[2])
-    x = [random.uniform(min_coord, max_coord) for _ in range(city_num)]
-    y = [random.uniform(min_coord, max_coord) for _ in range(city_num)]
+            tmp = line.strip().split()
+            for j in range(len(tmp)):
+                dis[i][j] = int(tmp[j])
+            i+=1
+    x = [0 for _ in range(city_num)]
+    y = [0 for _ in range(city_num)]
+    i=0
+    with open("DataSetCordinates.txt", "r") as f:
+        for line in f:
+            tmp = line.strip().split()
+            x[i] = float(tmp[0])
+            y[i] = float(tmp[1])
+            i+=1
     return dis,x,y,city_num
 def plotter(x,y,gbest_path,gbest,t):
     plt.scatter(x, y, color='black')
@@ -108,9 +109,10 @@ def plotBest(x,y,gbest_path,gbest):
     plt.xlabel('x coordination')
     plt.ylabel('y coordination')
     plt.show()
-def tabu( iter,path):
+def tabu( iter):
     # Step 1. Initialization
-    dis,x,y,city_num = read_Data(path)
+    dis,x,y,city_num = read_Data()
+    print(x, y)
     start_time = time.time()
     wasted_time = 0
     city_list = [i for i in range(city_num)]
@@ -172,7 +174,7 @@ def tabu( iter,path):
         plt.cla()
 
         # Step 2.4. Plot the temporary result
-        #plotter(x,y,gbest_path,gbest,t)
+        plotter(x,y,gbest_path,gbest,t)
     #if you want to cakculate the exec time whitout plotting,comment the plotter function above
     exec_time =  time.time() - start_time - wasted_time
     print(exec_time)
@@ -191,6 +193,6 @@ def tabu( iter,path):
 
 if __name__ == '__main__':
 
-    iter = 50
-    print(tabu(iter,"hard.txt"))
+    iter = 250
+    print(tabu(iter))
     
